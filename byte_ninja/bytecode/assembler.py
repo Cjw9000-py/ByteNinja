@@ -1,12 +1,11 @@
-from io import BytesIO
-from enum import IntEnum
-
 from .const import *
 from .token import *
-from .lexer import *
-from .syntax import *
+from .lexer import tokenize
 from .stream import BufferedStream
+from .syntax import SyntaxTree, Node, NODE_LEVEL
 from .codes import BYTECODE_BYTEORDER, OperationMode
+
+from enum import IntEnum
 
 
 class Assembler:
