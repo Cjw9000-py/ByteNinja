@@ -84,13 +84,21 @@ instructions:
 
 # all integers are encoded in little endian
 code object:
-    struct name_table{
-        u64 size;
-        struct {
-            cstring name;
-        } entries[size];
+    struct object {
+        enum<u8> {
+            READ = 0,
+            WRITE = 1,
+        } mode;
+        struct name_table{
+            u64 size;
+            struct {
+                cstring name;
+            } entries[size];
+        };
+
+        instructions...
     };
-    instructions ...
+
 
 
 instruction encoding:

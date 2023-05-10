@@ -1,9 +1,8 @@
-from .const import *
 from enum import IntEnum
 from typing import Literal
 
-ByteorderType = Literal['little', 'big']
-BYTEORDER: ByteorderType = 'little'
+from .const import *
+
 
 c = iter(range(1000))
 class OPCode(IntEnum):
@@ -105,7 +104,12 @@ class Byteorder(IntEnum):
     BIG = 1
 
 
+ByteorderType = Literal['little', 'big']
+
 BYTEORDER_TO_LITERAL: dict[int, ByteorderType] = {
     Byteorder.LITTLE: 'little',
     Byteorder.BIG: 'big',
 }
+
+BYTECODE_BYTEORDER = Byteorder.LITTLE
+BYTECODE_BYTEORDER_AS_LITERAL = BYTEORDER_TO_LITERAL[BYTECODE_BYTEORDER]
