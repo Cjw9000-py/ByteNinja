@@ -110,16 +110,16 @@ class Assembler:
     def emit_pattern(self, pattern: list[tuple], nodes: list):
         assert len(pattern) == len(nodes)
 
-        for p, n in zip(pattern, nodes):
-            if p[0] == self.PatternType.EMIT_NAME:
+        for sub, n in zip(pattern, nodes):
+            if sub[0] == self.PatternType.EMIT_NAME:
                 self.emit_name(n)
-            elif p[0] == self.PatternType.EMIT_ENUM:
-                self.emit_enum(n, *p[1:])
-            elif p[0] == self.PatternType.EMIT_INTEGER:
-                self.emit_integer(n, *p[1:])
-            elif p[0] == self.PatternType.EMIT_LEVEL:
+            elif sub[0] == self.PatternType.EMIT_ENUM:
+                self.emit_enum(n, *sub[1:])
+            elif sub[0] == self.PatternType.EMIT_INTEGER:
+                self.emit_integer(n, *sub[1:])
+            elif sub[0] == self.PatternType.EMIT_LEVEL:
                 self.emit_level(n)
-            elif p[0] == self.PatternType.SKIP:
+            elif sub[0] == self.PatternType.SKIP:
                 ...
             else:
                 assert False
