@@ -11,8 +11,11 @@ class Node(list):
         self.type = typ
 
     def __repr__(self):
-        return f'{self.__class__.__name__}(type={self.type}, {", ".join(self)})'
-
+        return (
+            f'{self.__class__.__name__}(' 
+            f'type={self.type}, '
+            f'{", ".join(repr(i) for i in self)})'
+        )
 class PatternType(IntEnum):
     REQUIRE = 0
     BRANCH = 1

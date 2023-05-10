@@ -34,7 +34,7 @@ class Token:
 def exact(t: TokenType, value: str) -> Token:
     return Token(
         t,
-        re.compile(rf'^({re.escape(value)})\W'),
+        re.compile(rf'^({re.escape(value)})(?:\W|$)'),
     )
 
 c = iter(range(1000))
@@ -172,6 +172,46 @@ TOKEN_TYPE_TO_NAME = {
     TOK_COMMENT: 'COMMENT',
     TOK_COLON: 'COLON',
     TOK_EOF: 'EOF',
+}
+
+TOKEN_TYPE_TO_EXACT = {
+    TOK_GET: 'get',
+    TOK_PUT: 'put',
+    TOK_EMPTY: 'empty',
+    TOK_EDIT: 'edit',
+    TOK_FLIP: 'flip',
+    TOK_YIELD: 'yield',
+    TOK_APPEND: 'append',
+    TOK_INDEX: 'index',
+    TOK_FINISH: 'finish',
+    TOK_FORGET: 'forget',
+    TOK_PUSH: 'push',
+    TOK_POP: 'pop',
+    TOK_READ: 'read',
+    TOK_RARRAY: 'rarray',
+    TOK_WRITE: 'write',
+    TOK_WARRAY: 'warray',
+    TOK_LOOPX: 'loopx',
+    TOK_LOOP: 'loop',
+    TOK_BREAK: 'break',
+    TOK_TEST: 'test',
+    TOK_RET: 'ret',
+    TOK_SEEK: 'seek',
+    TOK_TELL: 'tell',
+    TOK_ENCODE: 'encode',
+    TOK_DECODE: 'decode',
+    TOK_END: 'end',
+    TOK_EQ: 'EQ',
+    TOK_NE: 'NE',
+    TOK_LT: 'LT',
+    TOK_GT: 'GT',
+    TOK_LE: 'LE',
+    TOK_GE: 'GE',
+    TOK_NOT: 'NOT',
+    TOK_SEEK_REL: 'REL',
+    TOK_SEEK_START: 'START',
+    TOK_SEEK_END: 'END',
+    TOK_COLON: ':',
 }
 
 TOKEN_TO_OPCODE = {

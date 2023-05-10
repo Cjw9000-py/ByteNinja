@@ -119,4 +119,7 @@ def test_lex_all_tokens():
 
     assert types == [TOKEN_TYPE_TO_NAME[t] for t in token_types]
 
-
+def test_without_whitespace_at_end():
+    tokens = tokenize('pop')
+    assert len(tokens) == 2  # with eof
+    assert tokens[0].type == TOK_POP
