@@ -139,7 +139,10 @@ class SyntaxTree(list):
 
         while ...:
             # peek
-            tok = self.tokens[-1]
+            try:
+                tok = self.tokens[-1]
+            except IndexError:
+                raise SyntaxError('expected an instruction but got eof')
 
             if tok.type in (TOK_END, TOK_EOF):
                 self.tokens.pop()
