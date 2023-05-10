@@ -1,7 +1,8 @@
-from io import BytesIO, RawIOBase
-
 from .sizes import BYTE
 from .codes import Byteorder, BYTEORDER_TO_LITERAL
+
+from os import SEEK_END
+from io import BytesIO, RawIOBase
 
 
 class Stream(RawIOBase):
@@ -127,6 +128,13 @@ class Stream(RawIOBase):
 
 
 class BufferedStream(BytesIO, Stream):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, data: bytes = b''):
+        super().__init__(data)
         self.byteorder = None
+
+    @property
+    def eof(self) -> bool:
+        cur = self.tell()
+        end = self.seek(0, SEEK_END)
+        self.seek(cur)
+        return end == cur
