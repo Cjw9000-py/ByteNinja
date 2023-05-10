@@ -1,4 +1,4 @@
-from .const import *
+from .sizes import *
 from .stream import BufferedStream
 from .codes import OperationMode, BYTECODE_BYTEORDER
 

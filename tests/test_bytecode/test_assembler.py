@@ -1,6 +1,6 @@
 import pytest
 
-from byte_ninja.bytecode.const import *
+from byte_ninja.bytecode.sizes import *
 from byte_ninja.bytecode.assembler import Assembler
 from byte_ninja.bytecode.codes import (
     BYTECODE_BYTEORDER_AS_LITERAL,

@@ -1,4 +1,4 @@
-from .const import *
+from .sizes import *
 from .token import *
 from .lexer import tokenize
 from .stream import BufferedStream

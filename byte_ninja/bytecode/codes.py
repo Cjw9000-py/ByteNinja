@@ -1,7 +1,7 @@
 from enum import IntEnum
 from typing import Literal
 
-from .const import *
+from .sizes import *
 
 
 c = iter(range(1000))

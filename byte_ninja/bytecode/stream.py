@@ -1,6 +1,6 @@
 from io import BytesIO, RawIOBase
 
-from .const import BYTE
+from .sizes import BYTE
 from .codes import Byteorder, BYTEORDER_TO_LITERAL
 
 
