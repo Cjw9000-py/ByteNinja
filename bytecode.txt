@@ -36,6 +36,12 @@ write {
     ]
 }
 
+stack values:
+    - any primitive type
+    - array
+    - mapping
+
+
 
 instructions:
     # data structure manipulation
@@ -43,7 +49,7 @@ instructions:
     - put <field>  # put a field into output
 
     # array manipulation
-    - empty <name> # start a new array
+    - empty <name> # push a new empty array to the stack
     - edit <name> <field> # load a existing array from a field
     - flip <name>  # flip the array ?
     - yield <name> # remove the last value from the array and place onto stack
@@ -54,6 +60,7 @@ instructions:
 
     # stack manipulation
     - push <primitive value> # push a primitive to the stack
+    - look <index> # lookup an index in the stack
     - place <field> # place a value from stack into output and pop it
     - pop # pop a value from stack
 
@@ -109,6 +116,15 @@ instruction encoding:
     primitive values = 8 bytes
 
 
+primitive data types:
+    any float
+    any int
+    any bool
+    any char
+    any byte
+
+    and any array thereof
+
 
 ---- test program
 input:
@@ -127,4 +143,6 @@ code:
         read(int 1, ...)
         put append
     }
+
+
 

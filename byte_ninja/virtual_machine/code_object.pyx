@@ -1,17 +1,19 @@
-from .sizes import *
-from .stream import BufferedStream
-from .codes import OperationMode, BYTECODE_BYTEORDER
+from io import BytesIO
+from byte_ninja.sizes import *
+from byte_ninja.stream import BufferedStream
+from byte_ninja.enums import StreamMode
+from byte_ninja.bytecode.codes import BYTECODE_BYTEORDER
+
+include "types.pxi"
 
 
-class CodeObject(BufferedStream):
-    def __init__(self, mode: OperationMode,
-                 names: dict[int, str],
+class CodeObject:
+    def __init__(self,
+                 names: list[str],
                  bytecode: bytes):
 
-        super().__init__(bytecode)
-        self.byteorder = BYTECODE_BYTEORDER
-
-        self.operation_mode = mode
+        self.data = bytecode
+        self.buffer = memoryview(bytecode)
         self.name_table = names
 
     def read_name(self) -> str:
@@ -30,10 +32,11 @@ class CodeObject(BufferedStream):
     @classmethod
     def from_bytes(cls, data: bytes):
         """ Create a new code object from the given binary representation. """
+
         stream = BufferedStream(data)
         stream.byteorder = BYTECODE_BYTEORDER
 
-        mode = OperationMode(stream.read_uint(BYTE))
+        mode = StreamMode(stream.read_uint(BYTE))
         name_table_size = stream.read_uint(QWORD)
 
         names = dict()
@@ -47,16 +50,11 @@ class CodeObject(BufferedStream):
         stream = BufferedStream()
         stream.byteorder = BYTECODE_BYTEORDER
 
-        items = sorted(self.name_table.items(), key=lambda x: x[0])
-        if [i[0] for i in items] != list(range(len(items))):
-            raise ValueError('name table is not continuous')
+        stream.write_uint(len(self.name_table), QWORD)
 
-        stream.write_uint(self.operation_mode, BYTE)
-        stream.write_uint(len(items), QWORD)
-
-        for i, n in items:
+        for i, n in enumerate(self.name_table):
             stream.write_cstring(n)
 
-        stream.write(self.getvalue())
+        stream.write(self.data)
         return stream.getvalue()
 

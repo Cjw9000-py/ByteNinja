@@ -1,5 +1,5 @@
 import re
-from .codes import OPCode, SeekMode, TestOperation
+from .codes import OPCode, SeekMode, OperationCode
 
 
 TokenType = int
@@ -250,13 +250,13 @@ TOKEN_TO_SEEK_MODE = {
 
 
 TOKEN_TO_OPERATION = {
-    TOK_EQ: TestOperation.EQ,
-    TOK_NE: TestOperation.NE,
-    TOK_LT: TestOperation.LT,
-    TOK_GT: TestOperation.GT,
-    TOK_LE: TestOperation.LE,
-    TOK_GE: TestOperation.GE,
-    TOK_NOT: TestOperation.NOT,
+    TOK_EQ: OperationCode.EQ,
+    TOK_NE: OperationCode.NE,
+    TOK_LT: OperationCode.LT,
+    TOK_GT: OperationCode.GT,
+    TOK_LE: OperationCode.LE,
+    TOK_GE: OperationCode.GE,
+    TOK_NOT: OperationCode.NOT,
 }
 
 

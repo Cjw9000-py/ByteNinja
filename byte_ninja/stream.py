@@ -1,15 +1,56 @@
-from .sizes import BYTE
-from .codes import Byteorder, BYTEORDER_TO_LITERAL
+from __future__ import annotations
 
-from os import SEEK_END
-from io import BytesIO, RawIOBase
+from byte_ninja.sizes import BYTE
+from byte_ninja.enums import ByteOrder, StreamMode
+
+from io import BytesIO, IOBase, RawIOBase, SEEK_END
+
+
+__all__ = [
+    'Stream',
+    'BufferedStream',
+    'StreamWrapper',
+]
 
 
 class Stream(RawIOBase):
-    byteorder: Byteorder | None
+    def __init__(self, byteorder: ByteOrder = None):
+        self._byteorder = byteorder
+        self._mode: StreamMode | None = None
+        self._set_mode()
 
-    def __init__(self):
-        self.byteorder = None
+    def _set_mode(self):
+        self._mode = 0
+        if self.readable():
+            self._mode |= StreamMode.READ
+
+        if self.writable():
+            self._mode |= StreamMode.WRITE
+
+        if self.seekable():
+            self._mode |= StreamMode.SEEK
+
+    @property
+    def stream_mode(self) -> StreamMode:
+        return self._mode
+
+    @property
+    def eof(self) -> bool:
+        if not self._mode.can_seek():
+            raise NotImplementedError
+
+        pos = self.tell()
+        end = self.seek(0, SEEK_END)
+        self.seek(pos)
+        return end == pos
+
+    @property
+    def byteorder(self) -> ByteOrder | None:
+        return self._byteorder
+
+    @byteorder.setter
+    def byteorder(self, value: ByteOrder):
+        self._byteorder = value
 
     def require(self, size: int) -> bytes:
         """
@@ -24,46 +65,44 @@ class Stream(RawIOBase):
 
         return data
 
-    def read_int(self, size: int, byteorder: Byteorder = None, signed: bool = False) -> int:
+    def read_int(self, size: int, byteorder: ByteOrder = None, signed: bool = False) -> int:
         """ Read an integer from the stream. """
 
         byteorder = byteorder or self.byteorder
         assert byteorder is not None, 'no byteorder provided'
-        literal = BYTEORDER_TO_LITERAL[byteorder]
 
         return int.from_bytes(
             self.require(size),
-            literal,
+            byteorder.as_literal(),
             signed=signed,
         )
 
-    def write_int(self, value: int, size: int, byteorder: Byteorder = None, signed: bool = False):
+    def write_int(self, value: int, size: int, byteorder: ByteOrder = None, signed: bool = False):
         """ Write an integer to the stream. """
         assert isinstance(value, int)
 
         byteorder = byteorder or self.byteorder
         assert byteorder is not None, 'no byteorder provided'
-        literal = BYTEORDER_TO_LITERAL[byteorder]
 
         self.write(value.to_bytes(
             size,
-            literal,
+            byteorder.as_literal(),
             signed=signed,
         ))
 
-    def read_uint(self, size: int, byteorder: Byteorder = None) -> int:
+    def read_uint(self, size: int, byteorder: ByteOrder = None) -> int:
         """ Read an unsigned integer from the stream. """
         return self.read_int(size, byteorder, False)
 
-    def read_sint(self, size: int, byteorder: Byteorder = None) -> int:
+    def read_sint(self, size: int, byteorder: ByteOrder = None) -> int:
         """ Read a signed integer from the stream. """
         return self.read_int(size, byteorder, True)
 
-    def write_uint(self, value: int, size: int, byteorder: Byteorder = None):
+    def write_uint(self, value: int, size: int, byteorder: ByteOrder = None):
         """ Write an unsigned integer to the stream. """
         return self.write_int(value, size, byteorder, False)
 
-    def write_sint(self, value: int,  size: int, byteorder: Byteorder = None):
+    def write_sint(self, value: int,  size: int, byteorder: ByteOrder = None):
         """ Write a signed integer to the stream. """
         return self.write_int(value, size, byteorder, True)
 
@@ -114,7 +153,6 @@ class Stream(RawIOBase):
             fail_eof,
         ).decode(encoding)
 
-
     def write_cstring(self, string: str,
                       encoding: str = 'utf8',
                       delimiter: bytes = b'\x00'):
@@ -127,14 +165,18 @@ class Stream(RawIOBase):
         )
 
 
-class BufferedStream(BytesIO, Stream):
-    def __init__(self, data: bytes = b''):
-        super().__init__(data)
-        self.byteorder = None
+class BufferedStream(Stream, BytesIO):
+    def __init__(self, data: bytes = b'', byteorder: ByteOrder = None):
+        BytesIO.__init__(self, data)
+        Stream.__init__(self, byteorder)
+
+
+class StreamWrapper(Stream):
+    def __init__(self, stream: IOBase, byteorder: ByteOrder = None):
+        super().__init__(byteorder)
+        self._stream = stream
 
     @property
-    def eof(self) -> bool:
-        cur = self.tell()
-        end = self.seek(0, SEEK_END)
-        self.seek(cur)
-        return end == cur
+    def inner(self) -> IOBase:
+        return self._stream
+

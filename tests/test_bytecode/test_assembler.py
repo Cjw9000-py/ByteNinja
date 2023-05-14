@@ -1,12 +1,9 @@
-import pytest
-
-from byte_ninja.bytecode.sizes import *
+from byte_ninja.sizes import *
 from byte_ninja.bytecode.assembler import Assembler
 from byte_ninja.bytecode.codes import (
     BYTECODE_BYTEORDER_AS_LITERAL,
-    OperationMode,
     SeekMode,
-    TestOperation,
+    OperationCode,
     OPCode,
 )
 
@@ -47,7 +44,7 @@ def test_warray(): run('warray name', j(b(OPCode.WARRAY), QWORD_NULL)),
 def test_loopx(): run('loopx: pop end', j(b(OPCode.LOOPX), QWORD_ONE, b(OPCode.POP))),
 def test_loop(): run('loop: pop end', j(b(OPCode.LOOP), QWORD_ONE, b(OPCode.POP))),
 def test_break(): run('break', j(b(OPCode.BREAK))),
-def test_test(): run('test EQ: pop end', j(b(OPCode.TEST), enc(TestOperation.EQ, BYTE), QWORD_ONE, b(OPCode.POP))),
+def test_test(): run('test EQ: pop end', j(b(OPCode.TEST), enc(OperationCode.EQ, BYTE), QWORD_ONE, b(OPCode.POP))),
 def test_ret(): run('ret', j(b(OPCode.RET))),
 def test_seek(): run('seek END', j(b(OPCode.SEEK), enc(SeekMode.END, BYTE))),
 def test_tell(): run('tell', j(b(OPCode.TELL))),

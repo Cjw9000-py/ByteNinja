@@ -1,7 +1,7 @@
 from .token import *
 from .codes import *
-from .sizes import *
-from .code_object import CodeObject
+from byte_ninja.sizes import *
+from byte_ninja.backends.pythonic.code_object import BaseCodeObject
 
 from io import StringIO
 from enum import IntEnum
@@ -17,7 +17,7 @@ class Disassembler:
 
     TOK_EOL = -1
 
-    def __init__(self, code: CodeObject):
+    def __init__(self, code: BaseCodeObject):
         self.code = code
         self.source = StringIO()
         self.indent_level = 0
@@ -52,13 +52,13 @@ class Disassembler:
             OPCode.LOOPX: [emit_token(TOK_COLON), emit_eol, emit_level, emit_eol],
             OPCode.BREAK: [emit_eol],
             OPCode.TEST: [emit_enum({
-                TestOperation.EQ: TOK_EQ,
-                TestOperation.NE: TOK_NE,
-                TestOperation.LT: TOK_LT,
-                TestOperation.GT: TOK_GT,
-                TestOperation.LE: TOK_LE,
-                TestOperation.GE: TOK_GE,
-                TestOperation.NOT: TOK_NOT,
+                OperationCode.EQ: TOK_EQ,
+                OperationCode.NE: TOK_NE,
+                OperationCode.LT: TOK_LT,
+                OperationCode.GT: TOK_GT,
+                OperationCode.LE: TOK_LE,
+                OperationCode.GE: TOK_GE,
+                OperationCode.NOT: TOK_NOT,
             }, BYTE), emit_token(TOK_COLON), emit_eol, emit_level, emit_eol],
             OPCode.RET: [emit_eol],
             OPCode.SEEK: [emit_enum({

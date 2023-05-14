@@ -1,7 +1,7 @@
 from enum import IntEnum
-from typing import Literal
 
-from .sizes import *
+from byte_ninja.enums import ByteOrder
+from byte_ninja.sizes import *
 
 
 c = iter(range(1000))
@@ -12,7 +12,7 @@ class OPCode(IntEnum):
 
     # array manipulation
     EMPTY = next(c)  # start a new array
-    EDIT = next(c)  # load a existing array from a field
+    EDIT = next(c)  # load an existing array from a field
     FLIP = next(c)  # flip the array ?
     YIELD = next(c)  # remove the last value from the array and place onto stack
     APPEND = next(c)  # append the value to the array (value taken from stack)
@@ -78,7 +78,7 @@ INSTRUCTION_LENGTHS = {
 }
 
 
-class TestOperation(IntEnum):
+class OperationCode(IntEnum):
     EQ = 0
     NE = 1
     LT = 2
@@ -88,28 +88,4 @@ class TestOperation(IntEnum):
     NOT = 6
 
 
-class SeekMode(IntEnum):
-    START = 0
-    REL = 1
-    END = 2
-
-
-class OperationMode(IntEnum):
-    WRITE = 0
-    READ = 1
-
-
-class Byteorder(IntEnum):
-    LITTLE = 0
-    BIG = 1
-
-
-ByteorderType = Literal['little', 'big']
-
-BYTEORDER_TO_LITERAL: dict[int, ByteorderType] = {
-    Byteorder.LITTLE: 'little',
-    Byteorder.BIG: 'big',
-}
-
-BYTECODE_BYTEORDER = Byteorder.LITTLE
-BYTECODE_BYTEORDER_AS_LITERAL = BYTEORDER_TO_LITERAL[BYTECODE_BYTEORDER]
+BYTECODE_BYTEORDER = ByteOrder.LITTLE

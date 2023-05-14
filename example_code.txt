@@ -1,0 +1,34 @@
+
+enum CreatureType(u8):
+    - hare = 0
+    - rat = 1
+end
+
+
+struct Color:
+    u8 r
+    u8 g
+    u8 b
+end
+
+
+struct Creature:
+    db '\x00\xffcreature'
+
+    type: CreateType
+    name: str
+    age: u32
+
+    fur_color: Color
+
+    if type == CreatureType.hare:
+        fur_color = Color(0xff, 0xff, 0xff)
+    elif type == CreatureType.rat:
+        fur_color = Color(0xff, 0xAA, 0xff)
+    end
+end
+
+
+
+
+

@@ -1,7 +1,7 @@
-from .sizes import *
+from byte_ninja.sizes import *
 from .token import *
 from .lexer import tokenize
-from .stream import BufferedStream
+from byte_ninja.stream import BufferedStream
 from .syntax import SyntaxTree, Node, NODE_LEVEL
 from .codes import BYTECODE_BYTEORDER, OperationMode
 
@@ -53,13 +53,13 @@ class Assembler:
             OPCode.LOOP: [skip, emit_level],
             OPCode.BREAK: [],
             OPCode.TEST: [emit_enum({
-                TOK_EQ: TestOperation.EQ,
-                TOK_NE: TestOperation.NE,
-                TOK_LT: TestOperation.LT,
-                TOK_GT: TestOperation.GT,
-                TOK_LE: TestOperation.LE,
-                TOK_GE: TestOperation.GE,
-                TOK_NOT: TestOperation.NOT,
+                TOK_EQ: OperationCode.EQ,
+                TOK_NE: OperationCode.NE,
+                TOK_LT: OperationCode.LT,
+                TOK_GT: OperationCode.GT,
+                TOK_LE: OperationCode.LE,
+                TOK_GE: OperationCode.GE,
+                TOK_NOT: OperationCode.NOT,
             }, BYTE), skip, emit_level],
             OPCode.RET: [],
             OPCode.SEEK: [emit_enum({

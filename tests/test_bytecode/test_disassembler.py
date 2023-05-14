@@ -1,6 +1,6 @@
 from byte_ninja.bytecode.assembler import *
 from byte_ninja.bytecode.disassembler import *
-from byte_ninja.bytecode.code_object import CodeObject
+from byte_ninja.backends.pythonic.code_object import BaseCodeObject
 
 def strip(source: str) -> str:
     return (
@@ -14,7 +14,7 @@ def strip(source: str) -> str:
 def run(source: str):
     asm = Assembler(source, OperationMode.READ)
 
-    obj = CodeObject.from_bytes(
+    obj = BaseCodeObject.from_bytes(
         asm.get_output()
     )
 

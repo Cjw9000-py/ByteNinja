@@ -1,5 +1,5 @@
 import pytest
-from byte_ninja.bytecode.stream import BufferedStream
+from byte_ninja.stream import BufferedStream
 from byte_ninja.bytecode.codes import Byteorder
 
 
