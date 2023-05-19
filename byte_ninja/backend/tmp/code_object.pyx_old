@@ -1,0 +1,60 @@
+# from io import BytesIO
+# from byte_ninja.sizes import *
+# from byte_ninja.stream import BufferedStream
+# from byte_ninja.enums import StreamMode
+# from byte_ninja.bytecode.codes import BYTECODE_BYTEORDER
+#
+# include "common.pxi"
+#
+#
+# class CodeObject:
+#     def __init__(self,
+#                  names: list[str],
+#                  bytecode: bytes):
+#
+#         self.data = bytecode
+#         self.buffer = memoryview(bytecode)
+#         self.name_table = names
+#
+#     def read_name(self) -> str:
+#         """
+#         Reads a name number from the stream
+#         and looks up the name in the name table.
+#         """
+#
+#         no = self.read_uint(QWORD, BYTECODE_BYTEORDER)
+#
+#         try:
+#             return self.name_table[no]
+#         except KeyError as e:
+#             raise KeyError('no name with that number does exist', no) from e
+#
+#     @classmethod
+#     def from_bytes(cls, data: bytes):
+#         """ Create a new code object from the given binary representation. """
+#
+#         stream = BufferedStream(data)
+#         stream.byteorder = BYTECODE_BYTEORDER
+#
+#         mode = StreamMode(stream.read_uint(BYTE))
+#         name_table_size = stream.read_uint(QWORD)
+#
+#         names = dict()
+#         for i in range(name_table_size):
+#             names[i] = stream.read_cstring()
+#
+#         return cls(mode, names, stream.read())
+#
+#     def to_bytes(self) -> bytes:
+#         """ Parse the code object into a binary representation. """
+#         stream = BufferedStream()
+#         stream.byteorder = BYTECODE_BYTEORDER
+#
+#         stream.write_uint(len(self.name_table), QWORD)
+#
+#         for i, n in enumerate(self.name_table):
+#             stream.write_cstring(n)
+#
+#         stream.write(self.data)
+#         return stream.getvalue()
+#

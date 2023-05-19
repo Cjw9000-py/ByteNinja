@@ -1,0 +1,17 @@
+include "common.pxi"
+import os
+
+cpdef void ctest_memory() except *:
+
+    assert os.environ['BYTE_NINJA_MEMORY_DEBUG'] == 'yes'
+    # cdef void* buf
+    #
+    # buf = malloc_s(100)
+    #
+    # failed = False
+    # try:
+    #     __checker__.check_allocations()
+    # except MemoryError:
+    #     failed = True
+    # free(buf)
+    # assert failed, 'did not fail'

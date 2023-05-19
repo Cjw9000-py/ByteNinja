@@ -1,3 +1,0 @@
-pytest~=7.3.1
-flit
-cython~=0.29
