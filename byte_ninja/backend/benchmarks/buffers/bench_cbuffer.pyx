@@ -1,4 +1,4 @@
-from memory.run_counts import *
+from buffers.run_counts import *
 
 cdef extern from "stdlib.h":
     void* malloc(size_t)

@@ -44,6 +44,14 @@ class ByteOrder(IntEnum):
     def as_literal(self) -> Literal['little', 'big']:
         return 'little' if self == self.LITTLE else 'big'  # noqa
 
+    @classmethod
+    def from_literal(cls, value: str):
+        if value == 'little':
+            return cls.LITTLE
+        elif value == 'big':
+            return cls.BIG
+        else:
+            raise ValueError('invalid literal', value)
 
     # aliases
 

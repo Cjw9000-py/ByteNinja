@@ -3,8 +3,9 @@
 # """
 #
 
-include "common.pxi"
-from tmp.buffer cimport *
+include "imports.pxi"
+include "memory.pxi"
+include "buffer.pxi"
 
 
 cpdef int ctest_buffer() except *:

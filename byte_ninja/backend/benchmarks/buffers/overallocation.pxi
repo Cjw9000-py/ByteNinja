@@ -1,4 +1,4 @@
-from memory.run_counts import *
+from buffers.run_counts import *
 
 from libc.stdint cimport (
     uint64_t

@@ -1,28 +1,15 @@
-#pragma once
-#include <inttypes.h>
+
 
 #define true 1
 #define false 0
 
-typedef uint8_t bool_t;
-typedef uint8_t byte_t;
 
-typedef uint8_t opcode_t;
-typedef uint64_t name_t;
-typedef uint64_t length_t;
 
 typedef byte_t byteorder_t;
-enum byteorder_e {
-    order_le_e = 0,
-    order_be_e = 1,
-};
+
 
 typedef bool_t array_type_t;
-enum array_type_e {
-    no_array_e = 0,
-    static_array_e = 1,
-    dynamic_array_e = 2,
-};
+
 
 typedef byte_t primitive_type_t;
 enum primitive_type_e {

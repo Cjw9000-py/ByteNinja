@@ -1,9 +1,6 @@
 # distutils: language = c++
 from libcpp.vector cimport vector
-
-
-
-from memory.run_counts import *
+from buffers.run_counts import *
 
 
 cpdef void run():

@@ -1,0 +1,197 @@
+
+datatypes:
+    - int <len> <order> <sign>
+    - float <size>
+
+planned:
+    - parsing of simple types
+    - bitpacks
+    - basic branching
+
+------ usage
+struct field {
+    string name;
+    int age;
+}
+
+struct data {
+    array<u64, field> fields;
+}
+
+write {
+    'fields': [
+        {
+            'name': 'a',
+            'age': 22,
+        },
+        {
+            'name': 'a',
+            'age': 22,
+        },
+        {
+            'name': 'a',
+            'age': 22,
+        },
+    ]
+}
+
+stack values:
+    - any primitive type
+    - array
+    - mapping
+
+data_type encoding:
+    byte is_primitive
+    byte is_array
+
+    if is_primitive:
+        byte type
+    
+
+
+
+
+
+<arg>:
+    an argument that can be given via the stack
+    or backed into the bytecode
+
+[arg]:
+    an argument that can only be given via the stack
+    (always first on the stack)
+
+(arg):
+    can only be backed into the bytecode
+
+instructions:
+    # data structure manipulation
+    - get <field>  # get a field from struct
+    - set <field>  # set a field from struct
+
+    # array manipulation
+    - dynamic (type) # create a empty dynamic array
+    - static <size> (type) # create a static array
+    - apop [darray] <value> # pop a value from an dynamic array
+    - apush [darray] <value> # push a value to an dynamic array 
+    - aget [array] <index> # put a value from an array onto stack
+    - aset [array] <index> <value> # put a value into the array
+    - freeze [darray] # turn a dynamic array into a static one
+    - loose [sarray] # turn a static array into a dynamic one
+    
+    # stack manipulation
+    - push <value> # push a primitive to the stack
+    - pop # pop a value from stack
+    - look <index> (mode) # lookup an index in the stack
+    - put <index> <value> (mode) # put a value into the stack at given position
+    - math [left] <right> <operation> # perform an mathematical operation on two values (result in left)
+
+    # stream manipulation
+    - seek <offset> <mode> # jump to a position in the stream
+    - tell # push the current stream pos to the stack
+    - read (type) # read a value from the stream
+    - rseq <count> (type) # read a sequence from the stream
+    - write <value> # write a value into the stream
+    - wseq [array] # write a sequence to the stream
+
+    # branching
+    - jump (offset) (dir) # jump to a specified position
+    - test [left] <right> <operation> # test a condition and if it is true execute the next instruction            
+    - ret # end the processing of current type
+
+bytecode:
+    header:
+        - uint8 byteorder
+        - uint64 name_count
+        - cstring names[name_count]
+        - uint64 type_count
+        - data_type types[type_count]
+        instructions: *
+            - uint8 opcode  
+            - ... args
+    
+    ---
+    data_type:
+        - uint8 type
+        if is_array:
+            - uint8 array_type
+            if array_type == static:
+                - uint64 length
+        if type == custom:
+            - uint64_t name_no
+        elif type == int:
+            - uint16_t size
+            - uint8_t byteorder
+            - uint8_t signed
+        elif type == float:
+            - uint16_t size
+    
+    value:
+        - uint64 type_no
+        - uint8 data[...]
+
+
+
+            
+
+
+
+
+
+# all integers are encoded in little endian
+code object:
+    struct object {
+        enum<u8> {
+            READ = 0,
+            WRITE = 1,
+        } mode;
+
+        struct name_table{
+            u64 size;
+            struct {
+                cstring name;
+            } entries[size];
+        };
+
+        instructions...
+    };
+
+
+
+instruction encoding:
+    instruction op code = 1 byte
+    names = 8 bytes
+    array_nos = 2 bytes
+    instruction counts = 8 bytes
+    primitive values = 8 bytes
+
+
+primitive data types:
+    any float
+    any int
+    any bool
+    any char
+    any byte
+
+    and any array thereof
+
+
+---- test program
+input:
+    <4 bytes count>
+    <4 bytes len><len bytes data> * count
+
+output struct:
+    struct ... {
+         array<array>
+    }
+
+code:
+    read(int, 4, little, unsigned)
+
+    loopx {
+        read(int 1, ...)
+        put append
+    }
+
+
+

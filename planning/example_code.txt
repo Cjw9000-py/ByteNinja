@@ -1,0 +1,37 @@
+
+
+
+# read the signature
+const u8[] sig = [137, 80, 78, 71, 13, 10, 26, 10]
+
+enum PacketType:
+    - ack
+    - data
+end
+
+struct Packet:
+    - PacketType type
+    
+    if type == PacketType.data:
+        - limit<u32, 2Gb> size
+        - u8 data[size]
+        - crc32<data> csum
+    end
+end
+
+iostream AckStream:
+    [u8] input [Packet]:
+        yield read<Packet>
+
+    [Packet] output:
+        write (yield)
+end
+
+
+
+
+
+
+
+
+

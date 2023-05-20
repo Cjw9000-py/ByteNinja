@@ -1,6 +1,15 @@
 import pytest
-from byte_ninja.backend.memory import MemoryChecker
 
+import os
+os.environ['BYTE_NINJA_MEMORY_DEBUG'] = 'yes'
+
+from tmp.memory import MemoryChecker
+from byte_ninja.backend.tests.ctest_memory import ctest_memory
+
+
+
+def test_memory_in_action():
+    ctest_memory()
 
 def test_memory_no_leak():
     checker = MemoryChecker()
@@ -31,3 +40,5 @@ def test_memory_leak():
 
     with pytest.raises(MemoryError):
         checker.check_allocations()
+
+

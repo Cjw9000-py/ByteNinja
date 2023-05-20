@@ -1,0 +1,19 @@
+
+typing:
+    primitive:
+        - float (32/64)
+        - int (u/s, 8-64, l/b)
+        - bool 
+        - static_arrays (type)
+        - dynamic_arrays (type)
+
+    parsing: (in/out)
+        - float
+        - int
+        - bool
+        - terminated array (primitive type) (term)
+        - fixed size array (type) (count)
+        - prefixed array (int type) (type)
+
+    
+

@@ -1,0 +1,23 @@
+{
+    "name": "byte-ninja",
+    "version": "1.0.0",
+    "publisher": "Cjw9000",
+    "engines": {
+      "vscode": "^1.0.0"
+    },
+    "contributes": {
+      "languages": [
+        {
+          "id": "byte-ninja",
+          "extensions": [".nj"]
+        }
+      ],
+      "grammars": [
+        {
+          "language": "byte-ninja",
+          "scopeName": "source.nj",
+          "path": "./syntaxes/byte-ninja.tmLanguage.json"
+        }
+      ]
+    }
+  }

@@ -4,13 +4,19 @@ from time import perf_counter
 from importlib import import_module
 from cProfile import Profile
 
-from memory import (
-    bench_buffer
+from buffers import (
+    bench_cbuffer,
+    bench_overallocation_1k,
+    bench_vector,
+    bench_list,
 )
 
 suites = {
     'memory': [
-        bench_buffer
+        bench_cbuffer,
+        bench_overallocation_1k,
+        bench_vector,
+        bench_list,
     ]
 }
 

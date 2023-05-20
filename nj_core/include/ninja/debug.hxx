@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "ninja/config.h"
+#include "ninja/config.hxx"
 
 #define VERBOSE
 
